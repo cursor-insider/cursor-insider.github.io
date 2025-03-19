@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深入了解 Cursor - Cursor Insider</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 复用 index.html 的基础样式 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --color-primary: #007AFF;
+            --color-secondary: #5856D6;
+            --color-text: #1F2937;
+            --color-text-light: #6B7280;
+            --color-background: #FFFFFF;
+            --color-card: #F9FAFB;
+            --color-card-hover: #F3F4F6;
+            --color-border: #E5E7EB;
+        }
+        
+        .dark {
+            --color-primary: #3B82F6;
+            --color-secondary: #8B5CF6;
+            --color-text: #F9FAFB;
+            --color-text-light: #D1D5DB;
+            --color-background: #111827;
+            --color-card: #1F2937;
+            --color-card-hover: #374151;
+            --color-border: #374151;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .content-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .content-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .tab-button.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .tab-button:not(.active) {
+            background-color: var(--color-card);
+            border-color: var(--color-border);
+        }
+        
+        .tab-button:not(.active):hover {
+            border-color: var(--color-primary);
+        }
+
+        .loading-spinner {
+            display: none;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner.visible {
+            display: flex;
+        }
+
+        /* 骨架屏动画 */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                var(--color-card) 25%,
+                var(--color-card-hover) 50%,
+                var(--color-card) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        /* 导航栏样式优化 */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--color-text-light);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .header-blur {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-link {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+    <script async src="//changkun.de/urlstat/client.js"></script>
+</head>
+<body>
+    <header class="sticky top-0 z-10 bg-opacity-80 header-blur border-b border-gray-200 dark:border-gray-800" style="background-color: var(--color-background);">
+        <div class="container">
+            <nav class="flex flex-wrap items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center transform transition-all duration-300 group-hover:rotate-6 group-hover:scale-110">
+                        <img src="https://www.cursor.com/assets/videos/logo/placeholder-logo.webp" alt="Cursor Logo" class="h-6 w-6">
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">Cursor Insider</h1>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="deep-dive.html" class="nav-link active">深入了解 Cursor</a>
+                    <a href="case-studies.html" class="nav-link">用户案例</a>
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">
+                        <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                        <i class="fas fa-moon text-indigo-300 hidden dark:block"></i>
+                    </button>
+                </div>
+
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-4">深入了解 Cursor</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400">探索 Cursor 的技术实现、团队故事和最新动态</p>
+        </div>
+
+        <div class="mb-8 flex flex-wrap gap-4 justify-center">
+            <button class="tab-button active" data-tab="all">全部内容</button>
+            <button class="tab-button" data-tab="founder-talks">创始人演讲与访谈</button>
+            <button class="tab-button" data-tab="tech-insights">技术深度分享</button>
+            <button class="tab-button" data-tab="latest-news">最新动态</button>
+        </div>
+
+        <div id="content-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 内容将通过 JavaScript 动态加载 -->
+        </div>
+
+        <div class="loading-spinner">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
+    </main>
+
+    <script src="components/footer.js"></script>
+    <script>
+        // 主题切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载 footer
+            loadFooter();
+
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                htmlElement.classList.toggle('dark');
+                htmlElement.classList.toggle('light');
+            });
+
+            // 模拟内容数据
+            const contentData = {
+                'founder-talks': [
+                    {
+                        type: 'founder-talks',
+                        title: 'AI 编程的未来：Cursor 团队访谈',
+                        source: 'Lex Fridman Podcast #447',
+                        date: '2025-03-15',
+                        image: 'https://i.ytimg.com/vi/oFfVt3S51T4/hqdefault.jpg',
+                        description: '在这期播客中，Cursor 团队深入探讨了 AI 辅助编程的未来发展方向，分享了他们对编程工具演进的独特见解。',
+                        link: 'https://www.youtube.com/watch?v=oFfVt3S51T4'
+                    },
+                    // 更多创始人访谈内容...
+                ],
+                'tech-insights': [
+                    {
+                        type: 'tech-insights',
+                        title: 'AI Engineer Conference 技术分享',
+                        source: 'Michael Truell & Sualeh Asif',
+                        date: '2025-03-10',
+                        image: 'https://i.ytimg.com/vi/6g28WpZbF1I/maxresdefault.jpg',
+                        description: '联合创始人深入讲解了 Cursor 的技术实现细节，包括代码自动补全、指令转代码等核心功能。',
+                        link: 'https://www.youtube.com/watch?v=6g28WpZbF1I'
+                    },
+                    // 更多技术分享内容...
+                ],
+                'latest-news': [
+                    {
+                        type: 'latest-news',
+                        title: 'Cursor 3.0 重大更新',
+                        source: '官方博客',
+                        date: '2025-03-01',
+                        image: 'https://substackcdn.com/image/fetch/w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc95a068f-ce85-4b0e-8e25-547efd4ee872_1600x900.png',
+                        description: '全新版本引入实时协作功能，支持多人同时编码，集成 GPT-5 模型带来更智能的代码补全和理解能力。',
+                        link: '#'
+                    },
+                    // 更多新闻内容...
+                ]
+            };
+
+            let currentPage = 1;
+            let currentTab = 'all';
+            let isLoading = false;
+            let hasMore = true;
+
+            const contentContainer = document.getElementById('content-container');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            // 创建内容卡片
+            function createContentCard(item) {
+                const card = document.createElement('div');
+                card.className = 'content-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg';
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-blue-500">${item.type}</span>
+                            <span class="text-sm text-gray-500">${item.date}</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">${item.title}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">${item.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">${item.source}</span>
+                            <a href="${item.link}" target="_blank" class="text-blue-500 hover:underline">查看详情</a>
+                        </div>
+                    </div>
+                `;
+                return card;
+            }
+
+            // 加载内容
+            function loadContent() {
+                if (isLoading || !hasMore) return;
+                isLoading = true;
+                loadingSpinner.classList.add('visible');
+
+                const fragment = document.createDocumentFragment();
+                let count = 0;
+                let totalItems = 0;
+                
+                Object.keys(contentData).forEach(key => {
+                    if (currentTab === 'all' || currentTab === key) {
+                        totalItems += contentData[key].length;
+                        contentData[key].forEach((item, index) => {
+                            // 根据当前页码计算应该显示的内容
+                            const startIndex = (currentPage - 1) * 6;
+                            const endIndex = startIndex + 6;
+                            if (index >= startIndex && index < endIndex) {
+                                const card = createContentCard(item);
+                                fragment.appendChild(card);
+                                count++;
+                            }
+                        });
+                    }
+                });
+
+                // 如果没有内容要加载，直接隐藏加载动画
+                if (count === 0) {
+                    isLoading = false;
+                    loadingSpinner.classList.remove('visible');
+                    hasMore = false;
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                // 计算是否还有更多内容
+                const totalPages = Math.ceil(totalItems / 6);
+                hasMore = currentPage < totalPages;
+
+                contentContainer.appendChild(fragment);
+
+                // 立即显示内容，无需额外延迟
+                document.querySelectorAll('.content-card:not(.visible)').forEach(card => {
+                    card.classList.add('visible');
+                });
+
+                isLoading = false;
+                loadingSpinner.classList.remove('visible');
+                currentPage++;
+
+                // 如果没有更多内容，隐藏加载动画
+                if (!hasMore) {
+                    loadingSpinner.style.display = 'none';
+                }
+            }
+
+            // 切换标签
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentTab = button.getAttribute('data-tab');
+                    currentPage = 1;
+                    hasMore = true;
+                    contentContainer.innerHTML = '';
+                    loadingSpinner.style.display = 'flex';
+                    loadContent();
+                });
+            });
+
+            // 监听滚动事件，实现无限加载
+            window.addEventListener('scroll', () => {
+                if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000) {
+                    loadContent();
+                }
+            });
+
+            // 初始加载
+            loadContent();
+        });
+    </script>
+</body>
+</html> 

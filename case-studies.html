@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户案例 - Cursor Insider</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 复用基础样式 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --color-primary: #007AFF;
+            --color-secondary: #5856D6;
+            --color-text: #1F2937;
+            --color-text-light: #6B7280;
+            --color-background: #FFFFFF;
+            --color-card: #F9FAFB;
+            --color-card-hover: #F3F4F6;
+            --color-border: #E5E7EB;
+        }
+        
+        .dark {
+            --color-primary: #3B82F6;
+            --color-secondary: #8B5CF6;
+            --color-text: #F9FAFB;
+            --color-text-light: #D1D5DB;
+            --color-background: #111827;
+            --color-card: #1F2937;
+            --color-card-hover: #374151;
+            --color-border: #374151;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .case-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .case-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .platform-filter {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid var(--color-border);
+        }
+
+        .platform-filter.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        .platform-filter:not(.active):hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .loading-spinner {
+            display: none;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner.visible {
+            display: flex;
+        }
+
+        /* Twitter 风格卡片 */
+        .twitter-card {
+            border: 1px solid var(--color-border);
+            border-radius: 1rem;
+        }
+
+        /* YouTube 风格卡片 */
+        .youtube-card {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        /* 博客风格卡片 */
+        .blog-card {
+            border: 1px solid var(--color-border);
+            border-radius: 1rem;
+        }
+
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* 导航栏样式优化 */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--color-text-light);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .header-blur {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-link {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+    <script async src="//changkun.de/urlstat/client.js"></script>
+</head>
+<body>
+    <header class="sticky top-0 z-10 bg-opacity-80 header-blur border-b border-gray-200 dark:border-gray-800" style="background-color: var(--color-background);">
+        <div class="container">
+            <nav class="flex flex-wrap items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center transform transition-all duration-300 group-hover:rotate-6 group-hover:scale-110">
+                        <img src="https://www.cursor.com/assets/videos/logo/placeholder-logo.webp" alt="Cursor Logo" class="h-6 w-6">
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">Cursor Insider</h1>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="deep-dive.html" class="nav-link">深入了解 Cursor</a>
+                    <a href="case-studies.html" class="nav-link active">用户案例</a>
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">
+                        <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                        <i class="fas fa-moon text-indigo-300 hidden dark:block"></i>
+                    </button>
+                </div>
+
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-4">用户案例</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400">来自全球开发者的真实使用体验与分享</p>
+        </div>
+
+        <div class="mb-8 flex flex-wrap gap-4 justify-center">
+            <button class="platform-filter active" data-platform="all">
+                <span class="flex items-center">
+                    <i class="fas fa-globe mr-2"></i>
+                    全部平台
+                </span>
+            </button>
+            <button class="platform-filter" data-platform="youtube">
+                <span class="flex items-center">
+                    <i class="fab fa-youtube mr-2"></i>
+                    YouTube
+                </span>
+            </button>
+            <button class="platform-filter" data-platform="twitter">
+                <span class="flex items-center">
+                    <i class="fab fa-twitter mr-2"></i>
+                    Twitter
+                </span>
+            </button>
+            <button class="platform-filter" data-platform="blog">
+                <span class="flex items-center">
+                    <i class="fas fa-blog mr-2"></i>
+                    博客文章
+                </span>
+            </button>
+        </div>
+
+        <div id="cases-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 内容将通过 JavaScript 动态加载 -->
+        </div>
+
+        <div class="loading-spinner">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
+    </main>
+
+    <script src="components/footer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载 footer
+            loadFooter();
+
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                htmlElement.classList.toggle('dark');
+                htmlElement.classList.toggle('light');
+            });
+
+            // 模拟案例数据
+            const casesData = {
+                'youtube': [
+                    {
+                        platform: 'youtube',
+                        title: 'Cursor 让我的编程效率提升10倍',
+                        author: 'TechWithTim',
+                        date: '2025-03-15',
+                        thumbnail: 'https://i.ytimg.com/vi/VIDEO_ID/maxresdefault.jpg',
+                        description: '详细展示了如何使用 Cursor 的 AI 功能来加速开发过程，包括实际的编码演示。',
+                        views: '150K',
+                        duration: '15:42',
+                        link: '#'
+                    },
+                    // 更多 YouTube 案例...
+                ],
+                'twitter': [
+                    {
+                        platform: 'twitter',
+                        author: 'Sarah Developer',
+                        handle: '@sarahdev',
+                        content: '使用 Cursor 一个月后，我的代码质量显著提升。AI 不仅帮我找出潜在问题，还给出了优化建议。强烈推荐给所有开发者！',
+                        date: '2025-03-10',
+                        likes: '2.5K',
+                        retweets: '892',
+                        link: '#'
+                    },
+                    // 更多 Twitter 案例...
+                ],
+                'blog': [
+                    {
+                        platform: 'blog',
+                        title: 'Cursor 如何改变我的开发工作流',
+                        author: '张开发',
+                        date: '2025-03-01',
+                        thumbnail: 'https://example.com/blog-image.jpg',
+                        description: '详细分享了在大型项目中使用 Cursor 的经验，包括团队协作、代码审查等方面的改进。',
+                        readTime: '8 分钟',
+                        link: '#'
+                    },
+                    // 更多博客案例...
+                ]
+            };
+
+            let currentPage = 1;
+            let currentPlatform = 'all';
+            let isLoading = false;
+            let hasMore = true;
+
+            const casesContainer = document.getElementById('cases-container');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const platformFilters = document.querySelectorAll('.platform-filter');
+
+            // 创建不同类型的卡片
+            function createCard(item) {
+                const card = document.createElement('div');
+                card.className = 'case-card';
+
+                switch (item.platform) {
+                    case 'youtube':
+                        card.innerHTML = `
+                            <div class="youtube-card bg-white dark:bg-gray-800 shadow-lg">
+                                <div class="relative">
+                                    <img src="${item.thumbnail}" alt="${item.title}" class="w-full aspect-video object-cover">
+                                    <span class="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 text-sm rounded">
+                                        ${item.duration}
+                                    </span>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold mb-2">${item.title}</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${item.description}</p>
+                                    <div class="flex items-center justify-between text-sm text-gray-500">
+                                        <span>${item.author}</span>
+                                        <span>${item.views} 次观看</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'twitter':
+                        card.innerHTML = `
+                            <div class="twitter-card bg-white dark:bg-gray-800 p-4 shadow-lg">
+                                <div class="flex items-center mb-3">
+                                    <img src="https://unavatar.io/twitter/${item.handle}" alt="${item.author}" 
+                                         class="w-12 h-12 rounded-full mr-3">
+                                    <div>
+                                        <div class="font-semibold">${item.author}</div>
+                                        <div class="text-gray-500 text-sm">${item.handle}</div>
+                                    </div>
+                                </div>
+                                <p class="mb-3">${item.content}</p>
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <span class="mr-4"><i class="far fa-heart mr-1"></i>${item.likes}</span>
+                                    <span><i class="fas fa-retweet mr-1"></i>${item.retweets}</span>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'blog':
+                        card.innerHTML = `
+                            <div class="blog-card bg-white dark:bg-gray-800 shadow-lg">
+                                <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h3 class="text-xl font-semibold mb-2">${item.title}</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">${item.description}</p>
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-500">${item.author}</span>
+                                        <span class="text-gray-500">${item.readTime}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                }
+
+                return card;
+            }
+
+            // 加载内容
+            function loadCases() {
+                if (isLoading || !hasMore) return;
+                isLoading = true;
+                loadingSpinner.classList.add('visible');
+
+                const fragment = document.createDocumentFragment();
+                let count = 0;
+                let totalItems = 0;
+                
+                Object.keys(casesData).forEach(platform => {
+                    if (currentPlatform === 'all' || currentPlatform === platform) {
+                        totalItems += casesData[platform].length;
+                        casesData[platform].forEach((item, index) => {
+                            // 根据当前页码计算应该显示的内容
+                            const startIndex = (currentPage - 1) * 6;
+                            const endIndex = startIndex + 6;
+                            if (index >= startIndex && index < endIndex) {
+                                const card = createCard(item);
+                                fragment.appendChild(card);
+                                count++;
+                            }
+                        });
+                    }
+                });
+
+                // 如果没有内容要加载，直接隐藏加载动画
+                if (count === 0) {
+                    isLoading = false;
+                    loadingSpinner.classList.remove('visible');
+                    hasMore = false;
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                // 计算是否还有更多内容
+                const totalPages = Math.ceil(totalItems / 6);
+                hasMore = currentPage < totalPages;
+
+                casesContainer.appendChild(fragment);
+
+                // 立即显示内容，无需额外延迟
+                document.querySelectorAll('.case-card:not(.visible)').forEach(card => {
+                    card.classList.add('visible');
+                });
+
+                isLoading = false;
+                loadingSpinner.classList.remove('visible');
+                currentPage++;
+
+                // 如果没有更多内容，隐藏加载动画
+                if (!hasMore) {
+                    loadingSpinner.style.display = 'none';
+                }
+            }
+
+            // 切换平台过滤器
+            platformFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    platformFilters.forEach(btn => btn.classList.remove('active'));
+                    filter.classList.add('active');
+                    currentPlatform = filter.getAttribute('data-platform');
+                    currentPage = 1;
+                    hasMore = true;
+                    casesContainer.innerHTML = '';
+                    loadingSpinner.style.display = 'flex';
+                    loadCases();
+                });
+            });
+
+            // 监听滚动事件
+            window.addEventListener('scroll', () => {
+                if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000) {
+                    loadCases();
+                }
+            });
+
+            // 初始加载
+            loadCases();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor: 市面上增长最快的 AI 编程工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --color-primary: #007AFF;
+            --color-primary-rgb: 0, 122, 255;
+            --color-secondary: #5856D6;
+            --color-secondary-rgb: 88, 86, 214;
+            --color-text: #1F2937;
+            --color-text-light: #6B7280;
+            --color-background: #FFFFFF;
+            --color-card: #F9FAFB;
+            --color-card-hover: #F3F4F6;
+            --color-border: #E5E7EB;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-base: all 0.3s ease;
+            --border-radius-base: 8px;
+        }
+        
+        .dark {
+            --color-primary: #3B82F6;
+            --color-primary-rgb: 59, 130, 246;
+            --color-secondary: #8B5CF6;
+            --color-secondary-rgb: 139, 92, 246;
+            --color-text: #F9FAFB;
+            --color-text-light: #D1D5DB;
+            --color-background: #111827;
+            --color-card: #1F2937;
+            --color-card-hover: #374151;
+            --color-border: #374151;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .card {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-base);
+            transition: var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            background-color: var(--color-card-hover);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--color-border);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -6px;
+            top: 24px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            border: 3px solid var(--color-background);
+            z-index: 1;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .profile-image {
+            border-radius: 50%;
+            border: 3px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                      linear-gradient(to right, var(--color-primary), var(--color-secondary)) border-box;
+            transition: var(--transition-base);
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .profile-image:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+        
+        .social-icon {
+            color: var(--color-text-light);
+            transition: var(--transition-base);
+            position: relative;
+            top: 0;
+        }
+        
+        .social-icon:hover {
+            color: var(--color-primary);
+            top: -3px;
+        }
+        
+        .theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--color-card) 25%,
+                var(--color-card-hover) 50%,
+                var(--color-card) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        .hover-lift {
+            transition: var(--transition-base);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .hover-scale {
+            transition: var(--transition-base);
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+        
+        .hover-rotate {
+            transition: var(--transition-base);
+        }
+        
+        .hover-rotate:hover {
+            transform: rotate(3deg);
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .profile-image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .side-nav {
+                display: none;
+            }
+        }
+        
+        .feature-card {
+            height: 450px; /* 设置固定初始高度 */
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            height: auto;
+            z-index: 10; /* 确保展开时在其他卡片之上 */
+        }
+
+        .feature-card .content-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:not(:hover) .content-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(transparent, var(--color-card));
+            pointer-events: none;
+        }
+
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            overflow-x: auto;
+            max-height: 200px; /* 限制代码块最大高度 */
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .code-block::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .code-block::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+
+        .code-block::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 2px;
+        }
+
+        .code-block::-webkit-scrollbar-corner {
+            background: #2d3748;
+        }
+
+        /* 添加滚动提示 */
+        .scroll-hint {
+            position: absolute;
+            right: 0.5rem;
+            bottom: 0.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .code-block:hover .scroll-hint {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            transition: var(--transition-base);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--color-secondary);
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .tab-button.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .tab-button:not(.active) {
+            background-color: var(--color-card);
+            border-color: var(--color-border);
+        }
+        
+        .tab-button:not(.active):hover {
+            border-color: var(--color-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        /* 右侧导航栏样式 */
+        .side-nav {
+            position: fixed;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-base);
+            padding: 1rem;
+            box-shadow: var(--shadow-md);
+            z-index: 100;
+            max-width: 200px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .side-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .side-nav::-webkit-scrollbar-track {
+            background: var(--color-card);
+        }
+
+        .side-nav::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 2px;
+        }
+
+        .side-nav-link {
+            display: block;
+            padding: 0.5rem;
+            color: var(--color-text-light);
+            font-size: 0.875rem;
+            transition: var(--transition-base);
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .side-nav-link:hover {
+            background-color: var(--color-card-hover);
+            color: var(--color-primary);
+        }
+
+        .side-nav-link.active {
+            color: var(--color-primary);
+            background-color: rgba(var(--color-primary-rgb), 0.1);
+            font-weight: 500;
+        }
+
+        /* 导航栏样式优化 */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--color-text-light);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .header-blur {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-link {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+    <script async src="//changkun.de/urlstat/client.js"></script>
+</head>
+<body>
+    <header class="sticky top-0 z-10 bg-opacity-80 header-blur border-b border-gray-200 dark:border-gray-800" style="background-color: var(--color-background);">
+        <div class="container mx-auto px-4 py-4">
+            <nav class="flex flex-wrap items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center transform transition-all duration-300 group-hover:rotate-6 group-hover:scale-110">
+                        <img src="https://www.cursor.com/assets/videos/logo/placeholder-logo.webp" alt="Cursor Logo" class="h-6 w-6">
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">Cursor Insider</h1>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="deep-dive.html" class="nav-link">深入了解 Cursor</a>
+                    <a href="case-studies.html" class="nav-link">用户案例</a>
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">
+                        <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                        <i class="fas fa-moon text-indigo-300 hidden dark:block"></i>
+                    </button>
+                </div>
+
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- 右侧导航栏 -->
+        <nav class="side-nav">
+            <a href="#hero" class="side-nav-link active">首页</a>
+            <a href="#founding-team" class="side-nav-link">创始团队</a>
+            <a href="#team-photos" class="side-nav-link">团队合影</a>
+            <a href="#features" class="side-nav-link">产品功能</a>
+            <a href="#history" class="side-nav-link">发展历程</a>
+            <a href="#innovation" class="side-nav-link">创新影响</a>
+            <a href="#deep-dive" class="side-nav-link">深入了解</a>
+            <a href="#testimonials" class="side-nav-link">用户反馈</a>
+        </nav>
+
+        <section id="hero" class="mb-16 fade-in">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="md:w-1/2">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">市面上增长最快的<br><span class="gradient-text">AI 编程工具</span></h1>
+                    <p class="text-lg" style="color: var(--color-text-light);">
+                        由四位 MIT 毕业生创立，Cursor 在短短两年内成为全球最热门的 AI 编程助手，
+                        年营收从零增长至一亿美元，增长率高达 9,900%。
+                    </p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://analyticsindiamag.com/wp-content/uploads/2025/03/Cursor-1040x1300.png" 
+                         alt="Cursor Growth" 
+                         class="rounded-lg shadow-xl w-full max-w-md mx-auto transform transition hover:scale-105 duration-500"
+                         loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <section id="founding-team" class="mb-16 fade-in delay-1">
+            <h2 class="text-3xl font-bold mb-6 text-center">创始团队</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Michael Truell -->
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="mb-4 overflow-hidden rounded-full">
+                        <img src="https://aie-cms-uploads.s3.us-west-1.amazonaws.com/AIE_Summit_2024_Day_2_WEB_363_d5e0464782.jpg" alt="Michael Truell" class="profile-image">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-1">Michael Truell</h3>
+                    <p class="mb-3 text-sm" style="color: var(--color-text-light);">联合创始人 & CEO</p>
+                    <div class="mb-4 text-sm" style="color: var(--color-text-light);">
+                        <p>MIT (2018-2021)</p>
+                        <p>曾在 2Sigma 和 Google 实习</p>
+                        <p>MIT 研究员</p>
+                    </div>
+                    <div class="flex space-x-3 mt-auto">
+                        <a href="https://mntruell.com/" target="_blank" class="social-icon"><i class="fas fa-globe"></i></a>
+                        <a href="https://github.com/truell20" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+                        <a href="https://x.com/mntruell/" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/in/michael-t-5b1bbb122/" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Sualeh Asif -->
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="mb-4 overflow-hidden rounded-full">
+                        <img src="https://avatars.githubusercontent.com/u/28659689?v=4" alt="Sualeh Asif" class="profile-image">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-1">Sualeh Asif</h3>
+                    <p class="mb-3 text-sm" style="color: var(--color-text-light);">联合创始人 & CPO</p>
+                    <div class="mb-4 text-sm" style="color: var(--color-text-light);">
+                        <p>MIT (2018-2022)</p>
+                        <p>2019-2022 MIT 研究助理</p>
+                        <p>专注于 AI 编程工具</p>
+                    </div>
+                    <div class="flex space-x-3 mt-auto">
+                        <a href="https://www.sualehasif.me/" target="_blank" class="social-icon"><i class="fas fa-globe"></i></a>
+                        <a href="https://x.com/sualehasif996" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/in/sualeh-a-1a4a97116/" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Arvid Lunnemark -->
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="mb-4 overflow-hidden rounded-full">
+                        <img src="https://images.crunchbase.com/image/upload/c_thumb,h_256,w_256,f_auto,g_face,z_0.7,q_auto:eco,dpr_1/ceotpirjqxb0uwto915v" alt="Arvid Lunnemark" class="profile-image">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-1">Arvid Lunnemark</h3>
+                    <p class="mb-3 text-sm" style="color: var(--color-text-light);">联合创始人</p>
+                    <div class="mb-4 text-sm" style="color: var(--color-text-light);">
+                        <p>MIT (2018-2022)</p>
+                        <p>曾在 Stripe 任软件工程师</p>
+                        <p>MIT 研究人员</p>
+                    </div>
+                    <div class="flex space-x-3 mt-auto">
+                        <a href="https://arvid.xyz/" target="_blank" class="social-icon"><i class="fas fa-globe"></i></a>
+                        <a href="https://arvid.xyz/commonplace-book/" target="_blank" class="social-icon"><i class="fas fa-book"></i></a>
+                        <a href="https://www.linkedin.com/in/arvid-lunnemark/" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Aman Sanger -->
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="mb-4 overflow-hidden rounded-full">
+                        <img src="https://media.licdn.com/dms/image/v2/C4E03AQEXHkvdiqg9Bw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663962742095?e=2147483647&v=beta&t=Ypa7fFXg-4hA2776WsjGM56060GvTEBJs2-8vhnSetA" alt="Aman Sanger" class="profile-image">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-1">Aman Sanger</h3>
+                    <p class="mb-3 text-sm" style="color: var(--color-text-light);">创始人</p>
+                    <div class="mb-4 text-sm" style="color: var(--color-text-light);">
+                        <p>MIT (2018-2022)</p>
+                        <p>Anysphere 早期成员</p>
+                        <p>技术与产品专家</p>
+                    </div>
+                    <div class="flex space-x-3 mt-auto">
+                        <a href="https://www.amansanger.com/books" target="_blank" class="social-icon"><i class="fas fa-book"></i></a>
+                        <a href="https://x.com/amanrsanger" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="https://github.com/Sanger2000" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/aman-sanger-482243171/" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="team-photos" class="mb-16 fade-in delay-2">
+            <h2 class="text-3xl font-bold mb-6 text-center">团队合影</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card overflow-hidden">
+                    <img src="https://imageio.forbes.com/specials-images/imageserve/66c7963e767f04b03895f9d2/founders-high-quality/1960x0.jpg" 
+                         alt="Cursor Founding Team" 
+                         class="w-full h-auto transform transition hover:scale-105 duration-500"
+                         loading="lazy">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold">Cursor 创始团队在旧金山</h3>
+                        <p class="text-sm" style="color: var(--color-text-light);">摄于 2023 年，背景为旧金山市政厅</p>
+                    </div>
+                </div>
+                <div class="card overflow-hidden">
+                    <img src="https://i.ytimg.com/vi/oFfVt3S51T4/hqdefault.jpg" 
+                         alt="Lex Fridman Podcast with Cursor Team" 
+                         class="w-full h-auto transform transition hover:scale-105 duration-500"
+                         loading="lazy">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold">Cursor 团队做客 Lex Fridman 播客</h3>
+                        <p class="text-sm" style="color: var(--color-text-light);">第 447 期：《AI 编程的未来》</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 新增: Cursor 产品功能介绍 -->
+        <section id="features" class="mb-16 fade-in delay-3">
+            <h2 class="text-3xl font-bold mb-6 text-center">Cursor 产品功能介绍</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6 feature-card">
+                    <div class="feature-icon text-blue-500">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">AI 编程助手</h3>
+                    <div class="content-wrapper">
+                        <p class="mb-4" style="color: var(--color-text-light);">
+                            Cursor 集成了 OpenAI 最新模型，可以根据自然语言描述生成完整代码片段，帮助开发者快速实现功能。
+                        </p>
+                        <div class="mt-auto">
+                            <div class="code-block text-sm">
+                                <div class="scroll-hint">滚动查看更多</div>
+                                <code>// 输入: 创建一个函数计算斐波那契数列</code><br>
+                                <code class="text-green-400">// Cursor 智能生成代码</code><br>
+                                <code>function fibonacci(n) {</code><br>
+                                <code>&nbsp;&nbsp;if (n <= 1) return n;</code><br>
+                                <code>&nbsp;&nbsp;return fibonacci(n-1) + fibonacci(n-2);</code><br>
+                                <code>}</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 feature-card">
+                    <div class="feature-icon text-purple-500">
+                        <i class="fas fa-magnifying-glass-chart"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">代码理解与解释</h3>
+                    <p class="mb-4" style="color: var(--color-text-light);">
+                        只需选中代码，Cursor 就能提供详细解释，帮助开发者理解复杂的代码逻辑、库函数或算法实现。
+                    </p>
+                    <div class="mt-auto">
+                        <div class="code-block text-sm">
+                            <code class="text-blue-400">// 复杂代码片段</code><br>
+                            <code>function mergeSort(arr) {</code><br>
+                            <code>&nbsp;&nbsp;if (arr.length <= 1) return arr;</code><br>
+                            <code>&nbsp;&nbsp;const mid = Math.floor(arr.length / 2);</code><br>
+                            <code>&nbsp;&nbsp;const left = mergeSort(arr.slice(0, mid));</code><br>
+                            <code>&nbsp;&nbsp;const right = mergeSort(arr.slice(mid));</code><br>
+                            <code>&nbsp;&nbsp;return merge(left, right);</code><br>
+                            <code>}</code><br><br>
+                            <code class="text-green-400">// Cursor 解释</code><br>
+                            <code>// 这是归并排序算法的实现：</code><br>
+                            <code>// 1. 分解：将数组分成两半</code><br>
+                            <code>// 2. 递归排序：对两半分别排序</code><br>
+                            <code>// 3. 合并：将排序后的两半合并</code><br>
+                            <code>// 时间复杂度: O(n log n)</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 feature-card">
+                    <div class="feature-icon text-green-500">
+                        <i class="fas fa-bug-slash"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">智能调试</h3>
+                    <p class="mb-4" style="color: var(--color-text-light);">
+                        Cursor 可以分析代码中的错误，提供修复建议，甚至自动修复简单的语法错误和逻辑问题。
+                    </p>
+                    <div class="mt-auto">
+                        <div class="code-block text-sm">
+                            <code class="text-red-400">// 有错误的代码</code><br>
+                            <code>function calculateArea(radius) {</code><br>
+                            <code>&nbsp;&nbsp;return Pi * radius * radius;</code><br>
+                            <code>}</code><br><br>
+                            <code class="text-green-400">// Cursor 修复建议</code><br>
+                            <code>// Pi 未定义，应使用 Math.PI</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 feature-card">
+                    <div class="feature-icon text-yellow-500">
+                        <i class="fas fa-comments-question-check"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">自然语言交流</h3>
+                    <p class="mb-4" style="color: var(--color-text-light);">
+                        通过内置的聊天界面，开发者可以直接向 Cursor 询问编程问题，获取代码示例或解决方案。
+                    </p>
+                    <div class="mt-auto pt-2">
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-md p-3 text-sm">
+                            <p class="font-semibold mb-2">用户: 如何在 React 中创建一个倒计时组件?</p>
+                            <p class="text-green-600 dark:text-green-400">Cursor: 这里是一个简单的 React 倒计时组件实现...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 feature-card">
+                    <div class="feature-icon text-red-500">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">代码重构</h3>
+                    <p class="mb-4" style="color: var(--color-text-light);">
+                        Cursor 能够智能分析代码质量，提供重构建议，帮助开发者优化代码结构、提高可读性和性能。
+                    </p>
+                    <div class="mt-auto">
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-md p-3 text-sm">
+                            <p class="font-semibold">重构建议:</p>
+                            <ul class="list-disc pl-5 mt-2 space-y-1">
+                                <li>提取重复逻辑到独立函数</li>
+                                <li>转换为箭头函数简化语法</li>
+                                <li>使用现代 ES6+ 语法优化</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 feature-card">
+                    <div class="feature-icon text-indigo-500">
+                        <i class="fas fa-folder-tree"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">项目级代码理解</h3>
+                    <p class="mb-4" style="color: var(--color-text-light);">
+                        Cursor 能够理解整个项目的结构和依赖关系，帮助开发者快速熟悉新项目或复杂代码库。
+                    </p>
+                    <div class="mt-auto">
+                        <div class="code-block text-sm">
+                            <code class="text-purple-400">// Cursor 项目分析</code><br>
+                            <code>PROJECT_STRUCTURE {</code><br>
+                            <code>&nbsp;&nbsp;src/</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;components/ - React 组件库</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;utils/ - 通用工具函数</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;api/ - 后端 API 接口</code><br>
+                            <code>&nbsp;&nbsp;DEPENDENCIES {</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;"react": 组件库依赖</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;"axios": API 通信库</code><br>
+                            <code>&nbsp;&nbsp;}</code><br>
+                            <code>&nbsp;&nbsp;MAIN_WORKFLOWS [</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;"用户认证流程",</code><br>
+                            <code>&nbsp;&nbsp;&nbsp;&nbsp;"数据获取与渲染"</code><br>
+                            <code>&nbsp;&nbsp;]</code><br>
+                            <code>}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="history" class="mb-16 fade-in delay-4">
+            <div class="card p-8">
+                <h2 class="text-3xl font-bold mb-6">Cursor 发展历程</h2>
+                <div class="space-y-8">
+                    <div class="timeline-item pl-8 pb-8">
+                        <div class="timeline-dot"></div>
+                        <h3 class="text-xl font-semibold mb-2">2023年1月</h3>
+                        <p>由四位 MIT 学生组成的 Anysphere 团队正式推出 Cursor。</p>
+                    </div>
+                    <div class="timeline-item pl-8 pb-8">
+                        <div class="timeline-dot"></div>
+                        <h3 class="text-xl font-semibold mb-2">2023年9月</h3>
+                        <p>从 OpenAI 创业基金获得 800万美元种子轮融资，开始加速产品开发。</p>
+                    </div>
+                    <div class="timeline-item pl-8 pb-8">
+                        <div class="timeline-dot"></div>
+                        <h3 class="text-xl font-semibold mb-2">2024年8月</h3>
+                        <p>获得 Andreessen Horowitz (a16z)、Thrive Capital 等投资者的 6000万美元 A 轮融资，当时 ARR 已达 1900万美元。</p>
+                    </div>
+                    <div class="timeline-item pl-8 pb-8">
+                        <div class="timeline-dot"></div>
+                        <h3 class="text-xl font-semibold mb-2">2024年11月</h3>
+                        <p>年度经常性收入 (ARR) 达到 6500万美元，用户增长迅速。</p>
+                    </div>
+                    <div class="timeline-item pl-8 pb-8">
+                        <div class="timeline-dot"></div>
+                        <h3 class="text-xl font-semibold mb-2">2025年1月</h3>
+                        <p>完成由 a16z、Thrive Capital 及其他投资者领投的 1.05亿美元 B 轮融资。</p>
+                    </div>
+                    <div class="timeline-item pl-8">
+                        <div class="timeline-dot"></div>
+                        <h3 class="text-xl font-semibold mb-2">2025年2月</h3>
+                        <p>ARR 达到 1亿美元，成为增长最快的 SaaS 公司，年同比增长率达 9,900%。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="innovation" class="mb-16 fade-in delay-5">
+            <h2 class="text-3xl font-bold mb-6 text-center">Cursor 的创新与影响</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card p-6 flex flex-col">
+                    <div class="text-4xl mb-4 text-blue-500">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">AI 辅助编程的先驱</h3>
+                    <p style="color: var(--color-text-light);">Cursor 代表了 AI 辅助编程的最前沿，它通过人工智能技术彻底改变了开发者编写代码的方式。</p>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <div class="text-4xl mb-4 text-green-500">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">自动化编码革命</h3>
+                    <p style="color: var(--color-text-light);">作为一个专注于"自动化编码"的工具，Cursor 展示了大型语言模型 (LLMs) 在软件开发领域的强大应用潜力。</p>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">学术背景的力量</h3>
+                    <p style="color: var(--color-text-light);">创始团队成员都拥有深厚的技术背景和研究经验，尤其在机器学习、数学和计算机科学领域。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 修改: 深入了解 Cursor 部分，分为多个标签页 -->
+        <section id="deep-dive" class="mb-16 fade-in delay-6">
+            <h2 class="text-3xl font-bold mb-6 text-center">深入了解 Cursor</h2>
+            <div class="card p-6">
+                <div class="flex flex-wrap gap-2 mb-6 justify-center">
+                    <button class="tab-button active" data-tab="founder-talks">创始人演讲与访谈</button>
+                    <button class="tab-button" data-tab="tech-insights">技术深度分享</button>
+                    <button class="tab-button" data-tab="latest-news">最新动态</button>
+                </div>
+                
+                <!-- 创始人演讲与访谈标签内容 -->
+                <div id="founder-talks" class="tab-content active">
+                    <div class="space-y-6">
+                        <div class="flex flex-col md:flex-row gap-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
+                            <div class="md:w-1/4">
+                                <img src="https://i.ytimg.com/vi/oFfVt3S51T4/hqdefault.jpg" alt="Lex Fridman Podcast" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">AI 编程的未来：Cursor 团队访谈</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">Lex Fridman Podcast #447</p>
+                                <p class="mb-2">在这期播客中，Cursor 团队深入探讨了 AI 辅助编程的未来发展方向，分享了他们对编程工具演进的独特见解，以及 Cursor 如何重新定义开发者的工作方式。</p>
+                                <a href="https://www.youtube.com/watch?v=oFfVt3S51T4" target="_blank" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fab fa-youtube mr-1"></i> 观看完整访谈
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
+                            <div class="md:w-1/4">
+                                <img src="https://i.ytimg.com/vi/GRiAcL-Q9uI/maxresdefault.jpg" alt="Michael Truell - Cursor 介绍" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">Cursor：重新定义编程体验</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">Michael Truell 产品介绍</p>
+                                <p class="mb-2">Michael Truell 详细介绍了 Cursor 的核心理念和创新特性，展示了如何通过 AI 技术提升开发效率，以及 Cursor 与传统编程工具的关键区别。</p>
+                                <a href="https://www.youtube.com/watch?v=GRiAcL-Q9uI" target="_blank" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fab fa-youtube mr-1"></i> 观看介绍视频
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/4">
+                                <img src="https://substackcdn.com/feed/podcast/1084089/post/136284642/cff6429a1776792fe27fcc7b886f18b4.jpg" alt="Latent Space Podcast" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">打造下一代编程工具</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">Aman Sanger @ Latent Space Podcast</p>
+                                <p class="mb-2">Aman 分享了 Cursor 的产品愿景、团队文化以及如何通过持续创新来改善开发者体验，深入探讨了 AI 编程助手的发展方向。</p>
+                                <a href="https://www.latent.space/p/cursor" target="_blank" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fas fa-podcast mr-1"></i> 收听完整节目
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 技术深度分享标签内容 -->
+                <div id="tech-insights" class="tab-content">
+                    <div class="space-y-6">
+                        <div class="flex flex-col md:flex-row gap-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
+                            <div class="md:w-1/4">
+                                <img src="https://i.ytimg.com/vi/6g28WpZbF1I/maxresdefault.jpg" alt="AI Engineer Conference" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">AI Engineer Conference 技术分享</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">Michael Truell & Sualeh Asif</p>
+                                <p class="mb-2">联合创始人深入讲解了 Cursor 的技术实现细节，包括代码自动补全、指令转代码等核心功能，以及未来编程范式的演进方向，如伪代码编程和 AI 执行约束任务等创新概念。</p>
+                                <a href="https://www.youtube.com/watch?v=6g28WpZbF1I" target="_blank" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fab fa-youtube mr-1"></i> 观看技术分享
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/4">
+                                <img src="https://i.ytimg.com/vi/4jDQi9P9UIw/maxresdefault.jpg" alt="Stanford CS153" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">斯坦福 CS153：规模化基础设施</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">Sualeh Asif @ Stanford University</p>
+                                <p class="mb-2">CTO Sualeh Asif 在斯坦福大学分享了 Cursor 的技术架构，探讨了在快速发展过程中遇到的索引和数据库挑战，以及如何通过创新解决方案支持产品规模化。</p>
+                                <a href="https://www.youtube.com/watch?v=4jDQi9P9UIw" target="_blank" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fab fa-youtube mr-1"></i> 观看课程分享
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 最新动态标签内容 -->
+                <div id="latest-news" class="tab-content">
+                    <div class="space-y-6">
+                        <div class="flex flex-col md:flex-row gap-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
+                            <div class="md:w-1/4">
+                                <img src="https://substackcdn.com/image/fetch/w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc95a068f-ce85-4b0e-8e25-547efd4ee872_1600x900.png" alt="Cursor 3.0" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">Cursor 3.0 重大更新</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">2025年3月发布</p>
+                                <p class="mb-2">全新版本引入实时协作功能，支持多人同时编码，集成 GPT-5 模型带来更智能的代码补全和理解能力。同时优化了项目管理功能，提供更强大的代码审查工具。</p>
+                                <a href="#" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fas fa-newspaper mr-1"></i> 查看更新详情
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row gap-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
+                            <div class="md:w-1/4">
+                                <img src="https://imageio.forbes.com/specials-images/imageserve/66c7963e767f04b03895f9d2/founders-high-quality/1960x0.jpg?format=jpg&width=960" alt="Cursor Enterprise" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">企业版正式发布</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">2025年2月发布</p>
+                                <p class="mb-2">面向大型企业的专业版本，提供团队协作、代码安全审计、自定义 AI 模型训练等企业级特性。目前已有多家世界 500 强企业采用。</p>
+                                <a href="#" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fas fa-building mr-1"></i> 了解企业版
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="md:w-1/4">
+                                <img src="https://i.ytimg.com/vi/oFfVt3S51T4/hqdefault.jpg" alt="开发者大会" class="rounded-lg w-full">
+                            </div>
+                            <div class="md:w-3/4">
+                                <h3 class="text-xl font-semibold">全球开发者大会预告</h3>
+                                <p class="text-sm mb-2" style="color: var(--color-text-light);">2025年4月</p>
+                                <p class="mb-2">首届 Cursor 全球开发者大会将在旧金山举行，届时将发布新一代插件系统、AI 训练功能升级，并宣布与多家顶级科技公司的战略合作。</p>
+                                <a href="#" class="inline-flex items-center text-blue-500 hover:underline">
+                                    <i class="fas fa-calendar-alt mr-1"></i> 预约参会
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="mb-16 fade-in delay-7">
+            <div class="card p-8">
+                <h2 class="text-3xl font-bold mb-6 text-center">用户反馈与成功案例</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">张工程师</h4>
+                                <p class="text-sm" style="color: var(--color-text-light);">资深全栈开发者</p>
+                            </div>
+                        </div>
+                        <p class="italic mb-3">"使用 Cursor 后，我的编码效率提高了至少 40%。它不仅能理解我的需求，还能给出多种实现方案并解释优缺点，就像有一位资深导师随时在身边指导。"</p>
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="ml-2 text-sm">5.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">李教授</h4>
+                                <p class="text-sm" style="color: var(--color-text-light);">计算机科学教授</p>
+                            </div>
+                        </div>
+                        <p class="italic mb-3">"Cursor 彻底改变了我教授编程的方式。学生们可以专注于问题解决和算法思维，而不是纠结于语法细节。这是编程教育的一次革命。"</p>
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="ml-2 text-sm">4.5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">王创始人</h4>
+                                <p class="text-sm" style="color: var(--color-text-light);">科技创业者</p>
+                            </div>
+                        </div>
+                        <p class="italic mb-3">"作为一个小型创业团队，Cursor 让我们能够以更小的团队完成更多工作。我们的开发速度提高了 3 倍，同时代码质量也有明显提升。这是我们的秘密武器。"</p>
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="ml-2 text-sm">5.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">刘工程师</h4>
+                                <p class="text-sm" style="color: var(--color-text-light);">AI 研究员</p>
+                            </div>
+                        </div>
+                        <p class="italic mb-3">"作为一名 AI 研究人员，我对 Cursor 的技术实现印象深刻。它不仅仅是一个代码补全工具，而是真正理解代码意图和上下文的智能助手，代表了 AI 编程辅助的未来。"</p>
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="ml-2 text-sm">4.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="components/footer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载 footer
+            loadFooter();
+
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            
+            // Check system preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+            }
+            
+            // Toggle theme
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    htmlElement.classList.add('light');
+                } else {
+                    htmlElement.classList.remove('light');
+                    htmlElement.classList.add('dark');
+                }
+            });
+
+            // 导航栏滚动监听
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.side-nav-link');
+            
+            function updateActiveLink() {
+                const scrollPosition = window.scrollY + 100; // 添加偏移量以提前激活
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 监听滚动事件
+            window.addEventListener('scroll', updateActiveLink);
+            
+            // 平滑滚动
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Observe fade-in elements
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(element => {
+                element.style.animationPlayState = 'paused';
+                observer.observe(element);
+            });
+            
+            // Tab functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and content
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
