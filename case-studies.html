@@ -7,41 +7,75 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* 复用基础样式 */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         :root {
             --color-primary: #007AFF;
+            --color-primary-rgb: 0, 122, 255;
             --color-secondary: #5856D6;
+            --color-secondary-rgb: 88, 86, 214;
             --color-text: #1F2937;
             --color-text-light: #6B7280;
             --color-background: #FFFFFF;
             --color-card: #F9FAFB;
             --color-card-hover: #F3F4F6;
             --color-border: #E5E7EB;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-base: all 0.3s ease;
+            --border-radius-base: 8px;
+            --font-size-base: 16px;
+            --line-height-base: 1.5;
+            --letter-spacing-base: -0.01em;
         }
         
         .dark {
             --color-primary: #3B82F6;
+            --color-primary-rgb: 59, 130, 246;
             --color-secondary: #8B5CF6;
+            --color-secondary-rgb: 139, 92, 246;
             --color-text: #F9FAFB;
             --color-text-light: #D1D5DB;
             --color-background: #111827;
             --color-card: #1F2937;
             --color-card-hover: #374151;
             --color-border: #374151;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
         }
         
+        /* Base styles with improved readability */
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--color-background);
             color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-base);
+            letter-spacing: var(--letter-spacing-base);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
+            width: 100%;
+        }
+
+        /* Text styling */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
         }
 
         .gradient-text {
@@ -51,10 +85,12 @@
             color: transparent;
         }
 
+        /* Card styling */
         .case-card {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
+            height: 100%;
         }
 
         .case-card.visible {
@@ -62,12 +98,27 @@
             transform: translateY(0);
         }
 
+        /* Platform filter styling */
+        .platform-filters-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .platform-filter {
             padding: 0.5rem 1rem;
             border-radius: 9999px;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: var(--transition-base);
             border: 1px solid var(--color-border);
+            min-height: 44px;
+            min-width: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            background-color: var(--color-card);
         }
 
         .platform-filter.active {
@@ -79,8 +130,10 @@
         .platform-filter:not(.active):hover {
             border-color: var(--color-primary);
             color: var(--color-primary);
+            background-color: var(--color-card-hover);
         }
 
+        /* Loading spinner */
         .loading-spinner {
             display: none;
             justify-content: center;
@@ -91,22 +144,21 @@
             display: flex;
         }
 
-        /* Twitter 风格卡片 */
-        .twitter-card {
+        /* Card style variants */
+        .twitter-card, .youtube-card, .blog-card {
             border: 1px solid var(--color-border);
-            border-radius: 1rem;
-        }
-
-        /* YouTube 风格卡片 */
-        .youtube-card {
-            border-radius: 1rem;
+            border-radius: var(--border-radius-base);
             overflow: hidden;
+            background-color: var(--color-card);
+            transition: var(--transition-base);
+            height: 100%;
+            box-shadow: var(--shadow-sm);
         }
 
-        /* 博客风格卡片 */
-        .blog-card {
-            border: 1px solid var(--color-border);
-            border-radius: 1rem;
+        .twitter-card:hover, .youtube-card:hover, .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            background-color: var(--color-card-hover);
         }
 
         .platform-icon {
@@ -114,7 +166,7 @@
             height: 24px;
         }
 
-        /* 导航栏样式优化 */
+        /* Navigation styles */
         .nav-link {
             position: relative;
             padding: 0.5rem 1rem;
@@ -151,80 +203,255 @@
             width: 100%;
         }
 
+        /* Header with blur effect */
         .header-blur {
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-
+        
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        /* Animation delays */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        
+        /* Theme toggle */
+        .theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+        
+        /* Mobile menu */
+        .mobile-nav-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--color-background);
+            z-index: 50;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-nav-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--color-card);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary);
+        }
+        
+        /* Accessibility improvements */
+        :focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+        
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-primary);
+            color: white;
+            padding: 8px;
+            z-index: 999;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Empty state styling */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--color-text-light);
+        }
+        
+        /* Mobile responsiveness improvements */
         @media (max-width: 768px) {
+            :root {
+                --font-size-base: 15px;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            h2 {
+                font-size: 1.75rem !important;
+            }
+            
+            h3 {
+                font-size: 1.5rem !important;
+            }
+            
             .nav-link {
-                padding: 0.5rem;
+                padding: 0.75rem 1rem;
+                margin: 0.25rem 0;
+            }
+            
+            button, 
+            a, 
+            .platform-filter, 
+            .nav-link {
+                min-height: 44px;
+                min-width: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .mobile-menu-button {
+                padding: 10px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            :root {
+                --font-size-base: 14px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .platform-filter {
+                margin-bottom: 0.5rem;
             }
         }
     </style>
     <script async src="//changkun.de/urlstat/client.js"></script>
 </head>
 <body>
-    <header class="sticky top-0 z-10 bg-opacity-80 header-blur border-b border-gray-200 dark:border-gray-800" style="background-color: var(--color-background);">
-        <div class="container">
+    <!-- Accessibility skip link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header class="sticky top-0 z-10 bg-opacity-90 header-blur border-b border-gray-200 dark:border-gray-800" style="background-color: var(--color-background);">
+        <div class="container mx-auto px-4 py-3">
             <nav class="flex flex-wrap items-center justify-between">
                 <a href="index.html" class="flex items-center space-x-3 group">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center transform transition-all duration-300 group-hover:rotate-6 group-hover:scale-110">
                         <img src="https://www.cursor.com/assets/videos/logo/placeholder-logo.webp" alt="Cursor Logo" class="h-6 w-6">
                     </div>
-                    <h1 class="text-2xl font-bold gradient-text">Cursor Insider</h1>
+                    <h1 class="text-xl font-bold gradient-text">Cursor Insider</h1>
                 </a>
                 
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="deep-dive.html" class="nav-link">深入了解 Cursor</a>
                     <a href="case-studies.html" class="nav-link active">用户案例</a>
-                    <button id="themeToggle" class="theme-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300" aria-label="Toggle dark mode">
                         <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
                         <i class="fas fa-moon text-indigo-300 hidden dark:block"></i>
                     </button>
                 </div>
 
-                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">
+                <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 mobile-menu-button" aria-expanded="false" aria-controls="mobileMenu">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </nav>
         </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="mobile-nav-menu hidden">
+            <div class="flex justify-between items-center mb-6">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                        <img src="https://www.cursor.com/assets/videos/logo/placeholder-logo.webp" alt="Cursor Logo" class="h-6 w-6">
+                    </div>
+                    <h1 class="text-xl font-bold gradient-text">Cursor Insider</h1>
+                </a>
+                <button id="closeMobileMenu" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-4">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="deep-dive.html" class="nav-link">深入了解 Cursor</a>
+                <a href="case-studies.html" class="nav-link active">用户案例</a>
+                <button id="mobileThemeToggle" class="theme-toggle flex items-center space-x-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 mt-4">
+                    <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+                    <i class="fas fa-moon text-indigo-300 hidden dark:block"></i>
+                    <span>切换主题</span>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <main class="container">
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold mb-4">用户案例</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400">来自全球开发者的真实使用体验与分享</p>
+    <main id="main-content" class="container mx-auto px-4 py-6">
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">用户案例</h1>
+            <p class="text-base md:text-lg" style="color: var(--color-text-light);">来自全球开发者的真实使用体验与分享</p>
         </div>
 
-        <div class="mb-8 flex flex-wrap gap-4 justify-center">
-            <button class="platform-filter active" data-platform="all">
-                <span class="flex items-center">
-                    <i class="fas fa-globe mr-2"></i>
-                    全部平台
-                </span>
-            </button>
-            <button class="platform-filter" data-platform="youtube">
-                <span class="flex items-center">
-                    <i class="fab fa-youtube mr-2"></i>
-                    YouTube
-                </span>
-            </button>
-            <button class="platform-filter" data-platform="twitter">
-                <span class="flex items-center">
-                    <i class="fab fa-twitter mr-2"></i>
-                    Twitter
-                </span>
-            </button>
-            <button class="platform-filter" data-platform="blog">
-                <span class="flex items-center">
-                    <i class="fas fa-blog mr-2"></i>
-                    博客文章
-                </span>
-            </button>
+        <div class="mb-8 platform-filters-container fade-in delay-1">
+            <div class="flex flex-nowrap">
+                <button class="platform-filter active" data-platform="all">
+                    <span class="flex items-center">
+                        <i class="fas fa-globe mr-2"></i>
+                        全部平台
+                    </span>
+                </button>
+                <button class="platform-filter" data-platform="youtube">
+                    <span class="flex items-center">
+                        <i class="fab fa-youtube mr-2"></i>
+                        YouTube
+                    </span>
+                </button>
+                <button class="platform-filter" data-platform="twitter">
+                    <span class="flex items-center">
+                        <i class="fab fa-twitter mr-2"></i>
+                        Twitter
+                    </span>
+                </button>
+                <button class="platform-filter" data-platform="blog">
+                    <span class="flex items-center">
+                        <i class="fas fa-blog mr-2"></i>
+                        博客文章
+                    </span>
+                </button>
+            </div>
         </div>
 
-        <div id="cases-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="cases-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in delay-2">
             <!-- 内容将通过 JavaScript 动态加载 -->
         </div>
 
@@ -233,24 +460,75 @@
         </div>
     </main>
 
-    <script src="components/footer.js"></script>
+    <footer class="bg-gray-100 dark:bg-gray-900 py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center space-x-3 mb-6 md:mb-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                        <img src="https://www.cursor.com/assets/videos/logo/placeholder-logo.webp" alt="Cursor Logo" class="h-6 w-6">
+                    </div>
+                    <h1 class="text-xl font-bold gradient-text">Cursor Insider</h1>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="index.html" class="hover:text-blue-500 transition-colors duration-300">首页</a>
+                    <a href="deep-dive.html" class="hover:text-blue-500 transition-colors duration-300">深入了解 Cursor</a>
+                    <a href="case-studies.html" class="hover:text-blue-500 transition-colors duration-300">用户案例</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-800 pt-8 mt-8">
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+                    © 2024 Cursor Insider. 本站内容为非官方粉丝内容，与 Cursor 官方无关。
+                </p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 加载 footer
-            loadFooter();
-
+            // Theme toggle functionality
             const themeToggle = document.getElementById('themeToggle');
+            const mobileThemeToggle = document.getElementById('mobileThemeToggle');
             const htmlElement = document.documentElement;
             
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                htmlElement.classList.remove('light');
+            // Check for saved theme preference or use system preference
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
                 htmlElement.classList.add('dark');
+            } else {
+                htmlElement.classList.remove('dark');
             }
             
-            themeToggle.addEventListener('click', function() {
-                htmlElement.classList.toggle('dark');
-                htmlElement.classList.toggle('light');
-            });
+            function toggleTheme() {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    htmlElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+            
+            themeToggle.addEventListener('click', toggleTheme);
+            if (mobileThemeToggle) {
+                mobileThemeToggle.addEventListener('click', toggleTheme);
+            }
+            
+            // Mobile menu functionality
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const closeMobileMenuButton = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            function toggleMobileMenu() {
+                mobileMenu.classList.toggle('hidden');
+                document.body.classList.toggle('overflow-hidden');
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+            }
+            
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+            closeMobileMenuButton.addEventListener('click', toggleMobileMenu);
 
             // 模拟案例数据
             const casesData = {
@@ -266,7 +544,28 @@
                         duration: '15:42',
                         link: '#'
                     },
-                    // 更多 YouTube 案例...
+                    {
+                        platform: 'youtube',
+                        title: 'Cursor AI 实战：从零开发一个完整项目',
+                        author: 'CodeWithAntonio',
+                        date: '2025-03-05',
+                        thumbnail: 'https://i.ytimg.com/vi/ANOTHER_ID/maxresdefault.jpg',
+                        description: '全程演示如何使用 Cursor AI 从零开始快速开发一个全栈 Web 应用，包括前端、后端和数据库集成。',
+                        views: '200K',
+                        duration: '28:17',
+                        link: '#'
+                    },
+                    {
+                        platform: 'youtube',
+                        title: 'Cursor vs 其他 AI 编程工具对比',
+                        author: 'DevReviews',
+                        date: '2025-02-20',
+                        thumbnail: 'https://i.ytimg.com/vi/COMPARE_ID/maxresdefault.jpg',
+                        description: '深入对比 Cursor 与其他流行的 AI 编程工具在功能、性能和易用性方面的差异，包括实际编码测试。',
+                        views: '100K',
+                        duration: '22:05',
+                        link: '#'
+                    }
                 ],
                 'twitter': [
                     {
@@ -279,7 +578,26 @@
                         retweets: '892',
                         link: '#'
                     },
-                    // 更多 Twitter 案例...
+                    {
+                        platform: 'twitter',
+                        author: 'John Frontend',
+                        handle: '@johnfrontend',
+                        content: 'Cursor 彻底改变了我的前端开发工作流！它能理解我的 React 组件结构，自动补全驱动的开发让我专注于创意而不是语法。',
+                        date: '2025-03-05',
+                        likes: '1.8K',
+                        retweets: '542',
+                        link: '#'
+                    },
+                    {
+                        platform: 'twitter',
+                        author: 'Tech Lead Mary',
+                        handle: '@techmary',
+                        content: '我们整个团队都转向了 Cursor，代码审查效率提高了 35%。AI 对代码的理解能力太惊人了，特别是在处理复杂代码库时。',
+                        date: '2025-02-28',
+                        likes: '3.2K',
+                        retweets: '1.1K',
+                        link: '#'
+                    }
                 ],
                 'blog': [
                     {
@@ -287,12 +605,31 @@
                         title: 'Cursor 如何改变我的开发工作流',
                         author: '张开发',
                         date: '2025-03-01',
-                        thumbnail: 'https://example.com/blog-image.jpg',
+                        thumbnail: 'https://images.unsplash.com/photo-1607798748738-b15c40d34458',
                         description: '详细分享了在大型项目中使用 Cursor 的经验，包括团队协作、代码审查等方面的改进。',
                         readTime: '8 分钟',
                         link: '#'
                     },
-                    // 更多博客案例...
+                    {
+                        platform: 'blog',
+                        title: '从 VSCode 迁移到 Cursor 的完整指南',
+                        author: 'DevWang',
+                        date: '2025-02-20',
+                        thumbnail: 'https://images.unsplash.com/photo-1629654291663-b91ad427698f',
+                        description: '一步一步指导如何从 VSCode 迁移到 Cursor，包括扩展、快捷键、设置迁移和工作流优化。',
+                        readTime: '10 分钟',
+                        link: '#'
+                    },
+                    {
+                        platform: 'blog',
+                        title: 'Cursor 进阶技巧：让 AI 成为你的编程助手',
+                        author: 'LiTech',
+                        date: '2025-02-10',
+                        thumbnail: 'https://images.unsplash.com/photo-1612967408206-35879d8146ee',
+                        description: '分享 10 个 Cursor 进阶技巧，帮助开发者充分利用 AI 能力优化工作流程，减少重复工作。',
+                        readTime: '12 分钟',
+                        link: '#'
+                    }
                 ]
             };
 
@@ -313,7 +650,7 @@
                 switch (item.platform) {
                     case 'youtube':
                         card.innerHTML = `
-                            <div class="youtube-card bg-white dark:bg-gray-800 shadow-lg">
+                            <div class="youtube-card shadow-lg">
                                 <div class="relative">
                                     <img src="${item.thumbnail}" alt="${item.title}" class="w-full aspect-video object-cover">
                                     <span class="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 text-sm rounded">
@@ -323,27 +660,31 @@
                                 <div class="p-4">
                                     <h3 class="text-lg font-semibold mb-2">${item.title}</h3>
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${item.description}</p>
-                                    <div class="flex items-center justify-between text-sm text-gray-500">
+                                    <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
                                         <span>${item.author}</span>
                                         <span>${item.views} 次观看</span>
                                     </div>
+                                    <a href="${item.link}" class="mt-3 text-blue-500 hover:underline inline-flex items-center text-sm">
+                                        观看视频 <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                    </a>
                                 </div>
                             </div>
                         `;
                         break;
                     case 'twitter':
                         card.innerHTML = `
-                            <div class="twitter-card bg-white dark:bg-gray-800 p-4 shadow-lg">
+                            <div class="twitter-card p-4 shadow-lg">
                                 <div class="flex items-center mb-3">
                                     <img src="https://unavatar.io/twitter/${item.handle}" alt="${item.author}" 
-                                         class="w-12 h-12 rounded-full mr-3">
+                                         class="w-12 h-12 rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700">
                                     <div>
                                         <div class="font-semibold">${item.author}</div>
-                                        <div class="text-gray-500 text-sm">${item.handle}</div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">${item.handle}</div>
                                     </div>
                                 </div>
-                                <p class="mb-3">${item.content}</p>
-                                <div class="flex items-center text-gray-500 text-sm">
+                                <p class="mb-3 text-gray-700 dark:text-gray-300">${item.content}</p>
+                                <div class="text-gray-500 dark:text-gray-400 text-sm mb-3">${item.date}</div>
+                                <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700 pt-3">
                                     <span class="mr-4"><i class="far fa-heart mr-1"></i>${item.likes}</span>
                                     <span><i class="fas fa-retweet mr-1"></i>${item.retweets}</span>
                                 </div>
@@ -352,15 +693,18 @@
                         break;
                     case 'blog':
                         card.innerHTML = `
-                            <div class="blog-card bg-white dark:bg-gray-800 shadow-lg">
+                            <div class="blog-card shadow-lg">
                                 <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover">
                                 <div class="p-4">
-                                    <h3 class="text-xl font-semibold mb-2">${item.title}</h3>
+                                    <h3 class="text-lg font-semibold mb-2">${item.title}</h3>
                                     <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">${item.description}</p>
-                                    <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-500">${item.author}</span>
-                                        <span class="text-gray-500">${item.readTime}</span>
+                                    <div class="flex items-center justify-between text-sm mb-3">
+                                        <span class="text-gray-500 dark:text-gray-400">${item.author}</span>
+                                        <span class="text-gray-500 dark:text-gray-400">${item.readTime}</span>
                                     </div>
+                                    <a href="${item.link}" class="text-blue-500 hover:underline inline-flex items-center text-sm">
+                                        阅读全文 <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                    </a>
                                 </div>
                             </div>
                         `;
@@ -396,8 +740,19 @@
                     }
                 });
 
-                // 如果没有内容要加载，直接隐藏加载动画
+                // 如果没有内容要加载，显示空状态
                 if (count === 0) {
+                    if (casesContainer.childElementCount === 0) {
+                        const emptyState = document.createElement('div');
+                        emptyState.className = 'col-span-full empty-state';
+                        emptyState.innerHTML = `
+                            <div class="text-6xl mb-4 opacity-50"><i class="far fa-folder-open"></i></div>
+                            <h3 class="text-xl font-semibold mb-2">暂无内容</h3>
+                            <p>该分类下暂时没有内容，请尝试其他分类</p>
+                        `;
+                        casesContainer.appendChild(emptyState);
+                    }
+                    
                     isLoading = false;
                     loadingSpinner.classList.remove('visible');
                     hasMore = false;
@@ -411,19 +766,23 @@
 
                 casesContainer.appendChild(fragment);
 
-                // 立即显示内容，无需额外延迟
-                document.querySelectorAll('.case-card:not(.visible)').forEach(card => {
-                    card.classList.add('visible');
-                });
-
-                isLoading = false;
-                loadingSpinner.classList.remove('visible');
-                currentPage++;
-
-                // 如果没有更多内容，隐藏加载动画
-                if (!hasMore) {
-                    loadingSpinner.style.display = 'none';
-                }
+                // 使用 setTimeout 创建加载动画效果
+                setTimeout(() => {
+                    document.querySelectorAll('.case-card:not(.visible)').forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('visible');
+                        }, index * 100);
+                    });
+                    
+                    isLoading = false;
+                    loadingSpinner.classList.remove('visible');
+                    currentPage++;
+                    
+                    // 如果没有更多内容，隐藏加载动画
+                    if (!hasMore) {
+                        loadingSpinner.style.display = 'none';
+                    }
+                }, 300);
             }
 
             // 切换平台过滤器
@@ -440,15 +799,22 @@
                 });
             });
 
-            // 监听滚动事件
+            // 监听滚动事件，实现无限加载
             window.addEventListener('scroll', () => {
-                if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000) {
+                if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500) {
                     loadCases();
                 }
             });
 
             // 初始加载
             loadCases();
+            
+            // 确保所有可见的元素都启动动画
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(element => {
+                    element.style.animationPlayState = 'running';
+                });
+            }, 100);
         });
     </script>
 </body>
