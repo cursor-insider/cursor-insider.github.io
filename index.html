@@ -704,7 +704,7 @@
                     </p>
                 </div>
                 <div class="md:w-1/2">
-                    <img src="https://analyticsindiamag.com/wp-content/uploads/2025/03/Cursor-1040x1300.png" 
+                    <img src="assets/Cursor-Growth-2025.png" 
                          alt="Cursor Growth" 
                          class="rounded-lg shadow-xl w-full max-w-md mx-auto transform transition hover:scale-105 duration-500"
                          loading="lazy">
@@ -1123,7 +1123,7 @@
                     <div class="space-y-6">
                         <div class="flex flex-col md:flex-row gap-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
                             <div class="md:w-1/4">
-                                <img src="https://substackcdn.com/image/fetch/w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc95a068f-ce85-4b0e-8e25-547efd4ee872_1600x900.png" alt="Cursor 3.0" class="rounded-lg w-full">
+                                <img src="assets/Cursor-3.0-Update.png" alt="Cursor 3.0" class="rounded-lg w-full">
                             </div>
                             <div class="md:w-3/4">
                                 <h3 class="text-xl font-semibold">Cursor 3.0 重大更新</h3>
@@ -1394,17 +1394,17 @@
         window.addEventListener('load', animateOnScroll);
         
         // Lazy loading images
-        if ('loading' in HTMLImageElement.prototype) {
-            const images = document.querySelectorAll('img[loading="lazy"]');
-            images.forEach(img => {
-                img.src = img.dataset.src;
-            });
-        } else {
-            // Fallback for browsers that don't support lazy loading
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
-            document.body.appendChild(script);
-        }
+        // if ('loading' in HTMLImageElement.prototype) {
+        //     const images = document.querySelectorAll('img[loading="lazy"]');
+        //     images.forEach(img => {
+        //         img.src = img.dataset.src;
+        //     });
+        // } else {
+        //     // Fallback for browsers that don't support lazy loading
+        //     const script = document.createElement('script');
+        //     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+        //     document.body.appendChild(script);
+        // }
     </script>
 </body>
 </html>
